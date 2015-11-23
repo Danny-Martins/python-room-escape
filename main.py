@@ -12,6 +12,9 @@ class makeRoom(object):
 		self.exit_south = None
 		self.exit_west = None
 
+	def __repr__(self):
+		return self.name
+
 	def attach_next_to(self, parent_room):
 		random_temp = random.randint(1,4)
 		if random_temp == 1:
