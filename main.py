@@ -15,6 +15,7 @@ class makeRoom(object):
 	def __repr__(self):
 		return self.name
 
+
 	def attach_next_to(self, parent_room):
 		random_temp = random.randint(1,4)
 		if random_temp == 1:
@@ -39,6 +40,8 @@ class player(object):
 	def __init__(self, position):
 		self.position = position
 		self.backpack = []
+		self.x = 0
+		self.y = 0
 
 	def print_backpack(self):
 		print("here are the items in your backpack:")
@@ -82,7 +85,6 @@ class player(object):
 				time.sleep(2.5)
 
 	def check_input(self, choice):
-		self.move_items(choice)
 		if choice == "north" and self.position.exit_north:
 			self.position = self.position.exit_north
 		elif choice == "east" and self.position.exit_east:
@@ -94,20 +96,42 @@ class player(object):
 		else:
 			print("you typed something wrong")
 
-if __name__ == "__main__":
+	def grid_move(self, choice):
+		self.move_items(choice)
+		if choice == "north" and self.x !=0:
+			self.x -= 1
+			self.position = all_rooms[self.x][self.y]
+		elif choice == "east" and self.y !=2:
+			self.y += 1
+			self.position = all_rooms[self.x][self.y]
+		elif choice == "south" and self.x !=1:
+			self.x += 1
+			self.position = all_rooms[self.x][self.y]
+		elif choice == "west" and self.y !=0:
+			self.y -= 1
+			self.position = all_rooms[self.x][self.y]
 
-	room_start = makeRoom("the starter room","Sword")
-	room_test = makeRoom("Room A","winrar.exe")
-	room_test.attach_next_to(room_start)
-	# flamie is my gamer tag being a game and being just a test 
-	# before implimenting to HTML5 I named the player after myself
-	flamie = player(room_start)
+room_a = makeRoom("Room A")
+room_b = makeRoom("Room B")
+room_c = makeRoom("Room C")
+room_d = makeRoom("Room D")
+room_e = makeRoom("Room E")
+room_f = makeRoom("Room F")
 
-	while True:
+all_rooms = [[room_a, room_b, room_c],
+			[room_d, room_e, room_f]]
 
-		os.system("cls")
-		flamie.print_backpack()
-		flamie.print_room_items()
-		flamie.print_options()
-		choice = input()
-		flamie.check_input(choice)
+flamie = player(all_rooms[0][0])
+
+
+while True:
+
+	os.system("cls")
+	print(flamie.x)
+	print(flamie.y)
+	flamie.print_backpack()
+	flamie.print_room_items()
+	flamie.print_options()
+	choice = input()
+	# flamie.check_input(choice)
+	flamie.grid_move(choice)
