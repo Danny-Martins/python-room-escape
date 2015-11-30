@@ -1,12 +1,14 @@
+# for debug ignore
+# import code;code.interact(local=vars())
 from threading import Timer
 import random
 import time
 import os
 
 class makeRoom(object):
-	def __init__(self, name, item=None):
+	def __init__(self, name, items=None):
+		self.items = items or []
 		self.name = name
-		self.items = [item]
 		self.exit_north = None
 		self.exit_east = None
 		self.exit_south = None
@@ -15,7 +17,7 @@ class makeRoom(object):
 	def __repr__(self):
 		return self.name
 
-
+	# legacey code , more for testing at this point
 	def attach_next_to(self, parent_room):
 		random_temp = random.randint(1,4)
 		if random_temp == 1:
@@ -41,7 +43,7 @@ class player(object):
 		self.position = position
 		self.backpack = []
 		self.x = 0
-		self.y = 0
+		self.y = 1
 
 	def print_backpack(self):
 		print("here are the items in your backpack:")
@@ -110,19 +112,36 @@ class player(object):
 		elif choice == "west" and self.y !=0:
 			self.y -= 1
 			self.position = all_rooms[self.x][self.y]
+		else:
+			print("locked or you typed something wrong")
 
-room_a = makeRoom("Room A")
+# how the game must be layed out,  
+# item 1 in room a , item 1 used in room b which unlocks c 
+# item 2 in room c , item 2 used in room D which drops item 3
+# item 4 in room E, unlocks F , room F leads to final room
+# item 3 used in final room
+
+room_a = makeRoom("Room A", ["Rope"])
 room_b = makeRoom("Room B")
-room_c = makeRoom("Room C")
+room_c = makeRoom("Room C", ["Knife"])
 room_d = makeRoom("Room D")
-room_e = makeRoom("Room E")
+room_e = makeRoom("Room E", ["Crowbar"])
 room_f = makeRoom("Room F")
 
-all_rooms = [[room_a, room_b, room_c],
-			[room_d, room_e, room_f]]
+room_test1 = makeRoom("test1")
+room_test2 = makeRoom("test2")
 
-flamie = player(all_rooms[0][0])
+random_rooms = [room_a, room_b, room_c, room_d, room_e, room_f]
+random.shuffle(random_rooms)
 
+first_room_row = [random_rooms[0],random_rooms[1],random_rooms[2]]
+second_room_row = [random_rooms[3],random_rooms[4],random_rooms[5]]
+
+all_rooms = []
+all_rooms.append(first_room_row)
+all_rooms.append(second_room_row)
+
+flamie = player(all_rooms[0][1])
 
 while True:
 
